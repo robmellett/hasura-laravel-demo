@@ -23,6 +23,35 @@ services:
             - sail
         depends_on:
             - pgsql
+
+    graphql-engine:
+        ## On a Non Mac M1/ARM device, you might need to enable this line
+        # image: hasura/graphql-engine:v2.1.1.cli-migrations-v3
+        image: hasura/graphql-engine:v2.1.1.cli-migrations-v3.arm64
+        ports:
+            - "8080:8080"
+        restart: always
+        environment:
+            ## postgres database to store Hasura metadata
+            HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://${DB_USERNAME}:${DB_PASSWORD}@postgres:${FORWARD_DB_PORT:-5432}/${DB_DATABASE}
+
+            HASURA_GRAPHQL_DATABASE_URL: postgres://${DB_USERNAME}:${DB_PASSWORD}@postgres:${FORWARD_DB_PORT:-5432}/${DB_DATABASE}
+            ## enable the console served by server
+            HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+            ## enable debugging mode. It is recommended to disable this in production
+            HASURA_GRAPHQL_DEV_MODE: "true"
+            HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+
+            ## uncomment next line to set an admin secret
+            # HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+            # HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
+        volumes:
+            - './hasura/metadata:/hasura-metadata'
+        networks:
+            - sail
+        depends_on:
+            - pgsql
+
     pgsql:
         image: 'postgres:13'
         ports:
@@ -43,6 +72,7 @@ services:
 networks:
     sail:
         driver: bridge
+
 volumes:
     sail-pgsql:
         driver: local
