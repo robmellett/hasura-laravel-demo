@@ -33,9 +33,9 @@ services:
         restart: always
         environment:
             ## postgres database to store Hasura metadata
-            HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://${DB_USERNAME}:${DB_PASSWORD}@postgres:${FORWARD_DB_PORT:-5432}/${DB_DATABASE}
+            HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://${DB_USERNAME}:${DB_PASSWORD}@pgsql:${FORWARD_DB_PORT:-5432}/${DB_DATABASE}
 
-            HASURA_GRAPHQL_DATABASE_URL: postgres://${DB_USERNAME}:${DB_PASSWORD}@postgres:${FORWARD_DB_PORT:-5432}/${DB_DATABASE}
+            HASURA_GRAPHQL_DATABASE_URL: postgres://${DB_USERNAME}:${DB_PASSWORD}@pgsql:${FORWARD_DB_PORT:-5432}/${DB_DATABASE}
             ## enable the console served by server
             HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
             ## enable debugging mode. It is recommended to disable this in production
