@@ -18,7 +18,9 @@ class PostFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(),
-            'body' => $this->faker->sentence()
+            'body' => $this->faker->sentence(),
+            'is_active' => true,
+            'is_published' => true
         ];
     }
 }
